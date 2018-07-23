@@ -23,7 +23,7 @@ const _init = (io) => {
                 ts: new Date()
             };
             socket.broadcast.emit('message', msg);
-            db.insert(msg);
+            db.Message.insert(msg);
         });
 
         // when the client emits 'user add', this listens and executes
@@ -34,7 +34,7 @@ const _init = (io) => {
             addedUser = true;
             activeUsers.add(socket.user);
 
-            const messages = await db.getAll();
+            const messages = await db.Message.getAll();
 
             socket.emit('login', {
                 user: socket.user,

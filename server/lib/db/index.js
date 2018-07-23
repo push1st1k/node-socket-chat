@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Message = require('./Message');
 
 class Db {
     constructor() {
@@ -16,16 +17,7 @@ class Db {
             console.error('cannot connect', e);
         });
 
-        this.Message = mongoose.model('Message', { owner: String, value: String, ts: Date, room: String });
-    }
-
-    async insert(obj) {
-        const msg = new this.Message(obj);
-        return await msg.save();
-    }
-
-    async getAll() {
-        return await this.Message.find();
+        this.Message = new Message(mongoose);
     }
 }
 module.exports = new Db();
