@@ -1,8 +1,8 @@
-#Simple chat application
+# Simple chat application
 
 Built on socket.io, Node.js and Angular 6.
 
-#Running in Docker
+# Running in Docker
 
 To run it in Docker container, please issue
 

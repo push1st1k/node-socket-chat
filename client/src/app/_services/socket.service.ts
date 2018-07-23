@@ -9,16 +9,17 @@ import {environment} from '../../environments/environment';
 @Injectable()
 export class SocketService {
 
-  constructor() {}
+  constructor(private socketIo: socketIo) {
+  }
+
+  private socket;
 
   joinRoom(room: string) {
     return of('');
   }
 
-  private socket;
-
   public initSocket(): void {
-    this.socket = socketIo(environment.socketUrl);
+    this.socket = this.socketIo(environment.socketUrl);
   }
 
   public disconnect(): void {
