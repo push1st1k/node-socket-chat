@@ -1,0 +1,63 @@
+<mat-sidenav-container class="container">
+  <mat-sidenav position="end" mode="side" opened *ngIf="conversation">
+    <!--<mat-card>-->
+      <section align="end">
+        <a mat-button (click)="logout()">
+          Logout
+          <mat-icon>exit_to_app</mat-icon>
+        </a>
+      </section>
+      <mat-list class="members no-scroll">
+        <p><mat-icon>account_circle</mat-icon>{{(conversation.members).length}} Members</p>
+        <mat-list-item *ngFor="let member of conversation.members; index as i">
+          <img matListAvatar matTooltip="{{member.name}}" src="{{member.logo}}"
+          />
+          <p>{{member.name}} <i *ngIf="member.name === conversation.me.name">[me]</i></p>
+        </mat-list-item>
+      </mat-list>
+    <!--</mat-card>-->
+  </mat-sidenav>
+  <section class="empty-conversation" *ngIf="!conversation">
+    <h1 class="mat-display-1">Select a conversation from the left to start chatting</h1>
+  </section>
+  <section *ngIf="conversation">
+    <div class="mat-typography conversation-header">
+      <h2>
+        <mat-icon>forum</mat-icon>
+        {{conversation.display_name}}
+      </h2>
+    </div>
+
+    <mat-divider></mat-divider>
+    <mat-list #history dense class="conversation-history mat-typography">
+      <mat-list-item #historyItem *ngFor="let msg of messages; index as i" [dir]="msg.owner === conversation.me.name ? 'rtl' : 'ltr'">
+        <img *ngIf="msg.type === 'text'" matListAvatar
+             matTooltip="{{msg.owner}}"
+             src="{{conversation.members[msg.memberIdx]?.logo || 'https://randomuser.me/api/portraits/thumb/lego/0.jpg'}}"
+        />
+        <p *ngIf="msg.owner !== conversation.me.name && msg.type === 'text'" [dir]="'ltr'"><b>{{msg.owner}}:&nbsp;</b></p>
+        <p *ngIf="msg.type === 'text'" [dir]="'ltr'">{{msg.value}}</p>
+        <p *ngIf="msg.type === 'member:joined'" class="text-center">
+          <b>{{msg.owner}}</b> has joined the conversation</p>
+        <p *ngIf="msg.type === 'member:left'" class="text-center">
+          <b>{{msg.owner}}</b> left the conversation</p>
+        <p *ngIf="msg.type === 'member:typing'" class="text-center">
+          <b>{{msg.owner}}</b> is typing...</p>
+      </mat-list-item>
+    </mat-list>
+
+    <div class="conversation-input">
+      <form (ngSubmit)="sendText(text)">
+        <mat-divider></mat-divider>
+        <mat-form-field class="full-width">
+          <input matInput placeholder="Start chatting..." name="text" [(ngModel)]="text" (input)="detectTyping()">
+          <span matSuffix>
+            <button type="submit" mat-icon-button>
+              <mat-icon matSuffix>send</mat-icon>
+            </button>
+          </span>
+        </mat-form-field>
+      </form>
+    </div>
+  </section>
+</mat-sidenav-container>
