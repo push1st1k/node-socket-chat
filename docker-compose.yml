@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  server:
+    container_name: chat-server
+    image: node:8-alpine
+    environment:
+      NODE_ENV: production
+      MONGODB_HOST: mongodb
+      MONGODB_USERNAME: root
+      MONGODB_PASSWORD: example
+      WAIT_HOSTS: mongodb:27017
+    ports:
+      - 3000:3000
+    working_dir: /home/node/app
+    volumes:
+      - ./server:/home/node/app
+    command: npm start
+    depends_on:
+      - mongodb
+
+  client:
+    container_name: chat-web
+    image: node:8-alpine
+    ports:
+      - 4200:4200
+    working_dir: /home/node/app
+    volumes:
+      - ./client:/home/node/app
+    command: sh -c 'npm run build-prod && npm start'
+    depends_on:
+      - server
+
+  mongodb:
+    container_name: chat-mongo
+    image: mongo:4
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - 27017:27017
