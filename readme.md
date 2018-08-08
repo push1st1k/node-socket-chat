@@ -8,7 +8,9 @@ To run it in Docker container, please issue
 
 `docker-compose up`
 
-and open `localhost:4200`.
+wait until Angular CLI complies the source code
+(until the next message `** Angular Live Development Server is listening on 0.0.0.0:4200, 
+open your browser on http://localhost:4200/ **` appeared in the console).
 
 # Running Server and Client locally
 ## Prerequisites
